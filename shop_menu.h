@@ -1,10 +1,10 @@
-#ifndef CITY_MENU_H
-#define CITY_MENU_H
+#ifndef SHOP_MENU_H
+#define SHOP_MENU_H
 
+#include <stdio.h>
 #include <ncurses.h>
-#include <unistd.h>
 
-void print_town_menu(int *chosen,int start)
+void print_shop_menu()
 {
 
   initscr();
@@ -12,7 +12,7 @@ void print_town_menu(int *chosen,int start)
 
   int yMax, xMax, yBeg, xBeg;
   //DEKLARACJA OKNA
-  WINDOW * menu = newwin(7,40,1,0);
+  WINDOW * menu = newwin(7,60,1,0);
 
   //POBRANIE POCZATKU OKNA I KONIEC (JEGO GRANIC)
   getbegyx(menu,yBeg,xBeg);
@@ -34,17 +34,28 @@ void print_town_menu(int *chosen,int start)
   wrefresh(menu);
   wattroff(menu,A_BOLD);
 
+  int x,y;
+  getmaxyx(menu,y,x);
+
   wattron(menu,A_BOLD);
   mvwprintw(menu,1,1,"Mozliwe aktywnosci:");
+  mvwprintw(menu,1,x-10,"Cena:");
   wattroff(menu,A_BOLD);
   //KONIEC
 
   //MOZLIWOSCI
-  char *activities[] = {
-    "Udaj sie do sklepu.",
-    "Przejrzyj obecne zlecenie.",
-    "Zobacz statystyki postaci.",
-    "Idz dalej."
+  char *shop_items[] = {
+    "Ulepszenie miecza +3.",
+    "Ulepszenie miecza +8.",
+    "Zwiekszenie maksymalnej ilosci zycia o 25.",
+    "Zwiekszenie aktualnego zycia o 25."
+  };
+
+  char *shop_prices[] = {
+    "25 monet",
+    "65 monet",
+    "80 monet",
+    "25 monet"
   };
 
   //WLACZENIE WCZYTYWANIA ZNAKOW Z KLAWIATURY (KEY_UP ITD.)
@@ -62,7 +73,10 @@ while(true)
               wattron(menu, A_REVERSE);
 
           //A TU WYPISUJEMY I WYLACZAMY PODSWIETLENIE
-          mvwprintw(menu,i+2,1,activities[i]);
+          mvwprintw(menu,i+2,1,shop_items[i]);
+          wattroff(menu,A_REVERSE);
+          mvwprintw(menu,i+2,x-10,shop_prices[i]);
+          wattron(menu, A_REVERSE);
           wattroff(menu,A_REVERSE);
       }
       //POBIERAMY ZNAK CZYLI GORA STRZALKA ALBO DOL
@@ -88,17 +102,9 @@ while(true)
       if(key == 10)
         break;
   }
-  *chosen = show + 1;
-
-  if(start==1 && *chosen != 1)
-  {
-    printw("Nie ta opcja!\n");
-  }
   getch();
   //ZAMYKAMY OKNO
   endwin();
-  //TU ZDOBEDZIEMY INFORMACJE ZWROTNA JAKA OPCJE SPOSROD 4 WYBRAL GRACZ
-
 }
 
 #endif
