@@ -6,7 +6,6 @@
 
 void print_shop_menu()
 {
-
   initscr();
   noecho();
 
@@ -102,7 +101,6 @@ while(true)
       if(key == 10)
         break;
   }
-  getch();
   //ZAMYKAMY OKNO
   endwin();
 }

@@ -4,9 +4,8 @@
 #include <ncurses.h>
 #include <unistd.h>
 
-void print_town_menu(int *chosen,int start)
+void print_town_menu(int *chosen, int start)
 {
-
   initscr();
   noecho();
 
@@ -90,11 +89,16 @@ while(true)
   }
   *chosen = show + 1;
 
-  if(start==1 && *chosen != 1)
+  if(start == 1 && *chosen != 1)
   {
-    printw("Nie ta opcja!\n");
+    printw("asd");
   }
-  getch();
+
+  if(start == 1 && *chosen == 1)
+  {
+  move(yMax+2,0);
+  clrtoeol();
+  }
   //ZAMYKAMY OKNO
   endwin();
   //TU ZDOBEDZIEMY INFORMACJE ZWROTNA JAKA OPCJE SPOSROD 4 WYBRAL GRACZ

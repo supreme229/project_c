@@ -1,28 +1,40 @@
 #include "introduction.h"
 #include "city_menu.h"
 #include "shop_menu.h"
+#include "file_read.h"
+#include "structures.h"
+
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <time.h>
+#include <string.h>
+
+void pause2(int time)
+{
+  fflush(stdout);
+  usleep(time * 1000000);
+}
 
 int which_option_menu_town;
 int *temp = &which_option_menu_town;
 
 int main()
 {
-  system("clear");
 
+  system("clear");
+  FILE *shop_file;
+  read_from_file(shop_file);
   print_introduction();
-
-  fflush(stdout);
-  usleep(4000000);
+  pause2(3);
   system("clear");
 
-  while(*temp!=1)
+  while(*temp != 1)
   {
     system("clear");
     print_town_menu(temp,1);
   }
+
   system("clear");
   print_shop_menu();
   system("clear");
