@@ -7,11 +7,12 @@
 
 void read_from_file(FILE *file)
 {
-  file = fopen("test.txt","r");
-  for(int i = 0; i < 2; i++)
+  file = fopen("info.txt","r");
+  for(int i = 0; i < 12; i++)
   {
     int price, attr,id;
-    char name[50];
+    char name[50], price_str[5];
+    fscanf(file,"%s",price_str);
     fscanf(file,"%d",&id);
     fscanf(file,"%d",&price);
     fscanf(file,"%d",&attr);
@@ -28,10 +29,10 @@ void read_from_file(FILE *file)
     strcat(item.name[i], " ");
     }
 
+    strcpy(item.price_str[i],price_str);
     item.id[i] = id;
     item.price[i] = price;
     item.attribute[i] = attr;
-
   }
 }
 

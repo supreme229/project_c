@@ -2,9 +2,23 @@
 #define SHOP_MENU_H
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <ncurses.h>
+#include <time.h>
 
-void print_shop_menu()
+#include "structures.h"
+
+int check (int rand_id, int id_tab[], int size)
+{
+  for(int i = 0; i < size; i++)
+  {
+    if(rand_id == id_tab[i])
+      return 0;
+  }
+  return 1;
+}
+
+void print_shop_menu(int shop_level, int *chosen)
 {
   initscr();
   noecho();
@@ -43,19 +57,22 @@ void print_shop_menu()
   //KONIEC
 
   //MOZLIWOSCI
-  char *shop_items[] = {
-    "Ulepszenie miecza +3.",
-    "Ulepszenie miecza +8.",
-    "Zwiekszenie maksymalnej ilosci zycia o 25.",
-    "Zwiekszenie aktualnego zycia o 25."
-  };
+  //char *shop_items[];
+  int randomized_id, check_id = 0,id_tab[4] = {5,5,5,5}, iter = 0;
+  srand( time( NULL ) );
 
-  char *shop_prices[] = {
-    "25 monet",
-    "65 monet",
-    "80 monet",
-    "25 monet"
-  };
+  while(id_tab[3] == 5)
+  {
+    randomized_id = rand() % shop_level;
+
+    check_id = check(randomized_id, id_tab, 4);
+    if(check_id == 1)
+    {
+      id_tab[iter] = randomized_id;
+      iter++;
+    }
+  }
+
 
   //WLACZENIE WCZYTYWANIA ZNAKOW Z KLAWIATURY (KEY_UP ITD.)
   keypad(menu,true);
@@ -72,9 +89,9 @@ while(true)
               wattron(menu, A_REVERSE);
 
           //A TU WYPISUJEMY I WYLACZAMY PODSWIETLENIE
-          mvwprintw(menu,i+2,1,shop_items[i]);
+          mvwprintw(menu,i+2,1,item.name[id_tab[i]]);
           wattroff(menu,A_REVERSE);
-          mvwprintw(menu,i+2,x-10,shop_prices[i]);
+          mvwprintw(menu,i+2,x-10,item.price_str[id_tab[i]]);
           wattron(menu, A_REVERSE);
           wattroff(menu,A_REVERSE);
       }
@@ -101,6 +118,8 @@ while(true)
       if(key == 10)
         break;
   }
+
+  *chosen = item.id[id_tab[show]];
   //ZAMYKAMY OKNO
   endwin();
 }

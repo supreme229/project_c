@@ -1,0 +1,4 @@
+100 1 100 3 Zwiekszenie mocy miecza +7. aa
+120 2 100 3 Zwiekszenie mocy miecza +2. aa
+110 3 100 3 Zwiekszenie mocy miecza +3. aa
+130 4 100 3 Zwiekszenie mocy miecza +4. aa

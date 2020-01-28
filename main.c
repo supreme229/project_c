@@ -16,12 +16,11 @@ void pause2(int time)
   usleep(time * 1000000);
 }
 
-int which_option_menu_town;
+int which_option_menu_town, shop_items = 4;
 int *temp = &which_option_menu_town;
 
 int main()
 {
-
   system("clear");
   FILE *shop_file;
   read_from_file(shop_file);
@@ -36,7 +35,8 @@ int main()
   }
 
   system("clear");
-  print_shop_menu();
+  print_shop_menu(shop_items,temp);
+
   system("clear");
 
 }
