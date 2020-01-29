@@ -91,8 +91,10 @@ while(true)
 
   if(start == 1 && *chosen != 1)
   {
-    printw("asd");
+    printw("Udaj sie do sklepu!"); //NIE WYPISUJE SIE
+    refresh();
   }
+
 
   if(start == 1 && *chosen == 1)
   {
@@ -101,6 +103,7 @@ while(true)
   }
   //ZAMYKAMY OKNO
   endwin();
+  clear(); //LINIA 94 WYPISZE SIE GDY TEGO CLEARA USUNE LECZ WTEDY MENU SIE NIE USUWA POPRAWNIE PO SKONCZENIU DZIALANIA
   //TU ZDOBEDZIEMY INFORMACJE ZWROTNA JAKA OPCJE SPOSROD 4 WYBRAL GRACZ
 
 }
