@@ -13,7 +13,7 @@ struct player{
   int monsters_killed;
   int money_spent;
   int money_gained;
-}player1 = {100,100,25,0,0,0,0};
+}player1 = {100,100,110,0,0,0,0};
 
 void print_stats()
 {
@@ -57,9 +57,9 @@ void print_stats()
   wattroff(menu,A_BOLD);
   wattroff(menu,A_UNDERLINE);
 
-  mvwprintw(menu,yBeg+7,xBeg+1,"Ilosc zabitych potworow: %d \n",player1.sword_pow);
-  mvwprintw(menu,yBeg+8,xBeg+1,"Wydane pieniadze: %d koron\n",player1.sword_pow);
-  mvwprintw(menu,yBeg+9,xBeg+1,"Zarobione pieniadze: %d koron\n",player1.sword_pow);
+  mvwprintw(menu,yBeg+7,xBeg+1,"Ilosc zabitych potworow: %d \n",player1.monsters_killed);
+  mvwprintw(menu,yBeg+8,xBeg+1,"Wydane pieniadze: %d koron\n",player1.money_spent);
+  mvwprintw(menu,yBeg+9,xBeg+1,"Zarobione pieniadze: %d koron\n",player1.money_gained);
 
   wrefresh(menu);
   //wattroff(menu,A_BOLD);

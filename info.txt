@@ -1,4 +1,4 @@
-100 1 100 3 Zwiekszenie mocy miecza +7. aa
-120 2 100 3 Zwiekszenie mocy miecza +2. aa
-110 3 100 3 Zwiekszenie mocy miecza +3. aa
-130 4 100 3 Zwiekszenie mocy miecza +4. aa
+25 0 25 3 Zwiekszenie mocy miecza (+3) aa
+50 1 50 7 Zwiekszenie mocy miecza (+7) aa
+110 2 100 25 Eliksir wskrzeszenia (MAX HP +25) aa
+40 3 40 25 Eliksir uzdrowienia (HP +25) aa

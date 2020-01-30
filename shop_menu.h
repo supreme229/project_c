@@ -7,6 +7,7 @@
 #include <time.h>
 
 #include "structures.h"
+#include "player.h"
 
 int check (int rand_id, int id_tab[], int size)
 {
@@ -18,6 +19,29 @@ int check (int rand_id, int id_tab[], int size)
   return 1;
 }
 
+void which_bought(int id)
+{
+  switch(id)
+    {
+      case 0:
+        player1.sword_pow += item.attribute[id];
+        break;
+      case 1:
+        player1.sword_pow += item.attribute[id];
+        break;
+      case 2:
+        player1.hp_max += item.attribute[id];
+        player1.hp = player1.hp_max;
+        break;
+      case 3:
+        if(player1.hp_max - player1.hp < item.attribute[id])
+            player1.hp = player1.hp_max;
+        else
+            player1.hp += item.attribute[id];
+        break;
+    }
+}
+
 void print_shop_menu(int shop_level, int *chosen)
 {
   initscr();
@@ -25,7 +49,7 @@ void print_shop_menu(int shop_level, int *chosen)
 
   int yMax, xMax, yBeg, xBeg;
   //DEKLARACJA OKNA
-  WINDOW * menu = newwin(7,60,1,0);
+  WINDOW * menu = newwin(9,60,1,0);
 
   //POBRANIE POCZATKU OKNA I KONIEC (JEGO GRANIC)
   getbegyx(menu,yBeg,xBeg);
@@ -34,7 +58,7 @@ void print_shop_menu(int shop_level, int *chosen)
   //WPISY INFORMACYJNE
   //POCZATEK
   attron(A_BOLD);
-  mvprintw(yBeg-1,xBeg,"Menu miasta:\n");
+  mvprintw(yBeg-1,xBeg,"Menu sklepu:\n");
   attroff(A_BOLD);
 
   attron(A_BOLD);
@@ -51,7 +75,8 @@ void print_shop_menu(int shop_level, int *chosen)
   getmaxyx(menu,y,x);
 
   wattron(menu,A_BOLD);
-  mvwprintw(menu,1,1,"Mozliwe aktywnosci:");
+  mvwprintw(menu,1,1,"Dostepne przedmioty:");
+  mvwprintw(menu,yMax-2,xBeg+1,"Fundusze : %d",player1.money);
   mvwprintw(menu,1,x-10,"Cena:");
   wattroff(menu,A_BOLD);
   //KONIEC
@@ -108,19 +133,38 @@ while(true)
           break;
         case KEY_DOWN:
           show++;
-          if(show == 4)
-            show = 3;
+          if(show == 5)
+            show = 4;
           break;
         default:
           break;
       }
-      //10 - "ENTER" GDY UZTYKOWNIK GO WCISNIE MENU ZNIKA I IDZIEMY DALEJ
-      if(key == 10)
+      move(11,0);
+      clrtoeol();
+      refresh();
+      //10 - "ENTER" GDY UZYTKOWNIK GO WCISNIE MENU ZNIKA I IDZIEMY DALEJ
+      if(key == 10 && player1.money - item.price[item.id[id_tab[show]] ] >= 0)
+      {
+        player1.money -= item.price[item.id[id_tab[show]]];
+        player1.money_spent += item.price[item.id[id_tab[show]]];
+        *chosen = item.id[id_tab[show]];
+        which_bought(id_tab[show]);
         break;
+      }
+      if(key == KEY_LEFT)
+      {
+        break;
+      }
+      if(key == 10 && player1.money - item.price[item.id[id_tab[show]]] < 0)
+      {
+        attron(A_BLINK);
+        mvprintw(11,0,"Twoje fundusze sa nie wystarczajace!");
+        attroff(A_BLINK);
+        refresh();
+      }
   }
-
-  *chosen = item.id[id_tab[show]];
   //ZAMYKAMY OKNO
+  clear();
   endwin();
 }
 
