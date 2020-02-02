@@ -1,10 +1,12 @@
-#include "introduction.h"
+#include "texts.h"
 #include "city_menu.h"
 #include "shop_menu.h"
 #include "file_read.h"
 #include "structures.h"
 #include "player.h"
 #include "main_task.h"
+#include "texts.h"
+#include "fight.h"
 
 #include <stdio.h>
 #include <unistd.h>
@@ -12,6 +14,8 @@
 #include <time.h>
 #include <string.h>
 #include <ncurses.h>
+
+
 
 void pause2(int time)
 {
@@ -42,10 +46,22 @@ void check_which_option_in_town(int *town)
 
 int main()
 {
+
   system("clear");
   FILE *shop_file, *enemy_info;
   read_from_file_shop_items(shop_file);
   read_from_file_enemy_info(enemy_info);
+
+  /*
+  int which_option_fight;
+  int *fight_option = &which_option_fight;
+  while(true)
+  {
+    fight(fight_option,1);
+    what_chosen(fight_option,1);
+  }
+  */
+
   print_introduction();
   pause2(3);
   system("clear");
@@ -60,12 +76,13 @@ int main()
   print_shop_menu(shop_items,shop_option);
 
   system("clear");
-  while(true)
+  while(*town_option!=4)
   {
     system("clear");
     print_town_menu(town_option,0);
     check_which_option_in_town(town_option);
   }
+  print_dialogue(dialogue1,7);
 
   system("clear");
 

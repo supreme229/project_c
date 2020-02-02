@@ -41,11 +41,12 @@ void read_from_file_enemy_info(FILE *file)
   file = fopen("list.txt","r");
   for(int i = 0; i < 10; i++)
   {
-    int id, reward_int, damage;
+    int id, reward_int, damage, hp;
     char name[50], reward[5];
     fscanf(file,"%d",&id);
     fscanf(file,"%s",reward);
     fscanf(file,"%d",&reward_int);
+    fscanf(file,"%d",&hp);
     fscanf(file,"%d",&damage);
     fscanf(file,"%s",name);
     strcat(enemy.name[i], name);
@@ -62,6 +63,7 @@ void read_from_file_enemy_info(FILE *file)
     }
 
     strcpy(enemy.reward[i],reward);
+    enemy.hp[i] = hp;
     enemy.id[i] = id;
     enemy.reward_int[i] = reward_int;
     enemy.damage[i] = damage;

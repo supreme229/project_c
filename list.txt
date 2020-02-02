@@ -1,11 +1,11 @@
-0 0 0 0 Brak zlecenia! aa
-1 100 100 10 abcd ssdd aa
-2 100 100 10 ff aa
-3 100 100 10 ff aa
-4 100 100 10 ff aa
-5 100 100 10 ff aa
-6 100 100 10 ff aa
-7 100 100 10 ff aa
-8 100 100 10 ff aa
-9 100 100 10 ff aa
-10 100 100 10 ff aa
+0 0 0 0 0 Brak zlecenia! aa
+1 50 50 15 5 Ghule aa
+2 100 100 15 10 ff aa
+3 100 100 15 10 ff aa
+4 100 100 15 10 ff aa
+5 100 100 15 10 ff aa
+6 100 100 15 10 ff aa
+7 100 100 15 10 ff aa
+8 100 100 15 10 ff aa
+9 100 100 15 10 ff aa
+10 100 100 15 10 ff aa
