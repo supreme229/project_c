@@ -76,13 +76,8 @@ int main()
   read_from_file_shop_items(shop_file);
   read_from_file_enemy_info(enemy_info);
 
-
-  player1.sword_pow = 2;
-  fight_system();
-
   system("clear");
 
-  /*
   print_introduction();
   pause2(3);
   system("clear");
@@ -105,7 +100,8 @@ int main()
   }
   print_dialogue(dialogue1,7);
 
-  */
+  fight_system();
+
   system("clear");
 
 }
