@@ -1,44 +1,75 @@
+#ifndef FIGHT_H
+#define FIGHT_H
+
 #include "structures.h"
 #include "player.h"
 
 #include <ncurses.h>
 #include <time.h>
 
-int igni = 2, quen = 2;
-int *number_of_igni_left = &igni, *number_of_quen_left = &quen;
+int vigor = 2, igni_next_round, quen_def;
 
+int igni_attack(int sword_power,int monster_id)
+{
+  int igni_attack = (rand() % ((sword_power * 2) - 2) + 2);
 
-void what_chosen(int *chosen,int monster_id)
+  int if_igni_next_round = rand() % 2;
+
+  if(if_igni_next_round == 1)
+    igni_next_round = 1;
+  else
+    igni_next_round = 0;
+
+  enemy.hp[monster_id] -= igni_attack;
+
+  return enemy.hp[monster_id] - igni_attack;
+}
+
+int hard_attack(int sword_power, int monster_id)
+{
+  int if_hard_attack_success;
+
+  if(rand() % 4 == 0)
+    if_hard_attack_success = 0;
+  else
+    if_hard_attack_success = 1;
+
+  int amount_of_damage_player = sword_power * 2 * if_hard_attack_success;
+  return enemy.hp[monster_id] - amount_of_damage_player;
+}
+
+int quick_attack(int sword_power, int monster_id)
+{
+  return enemy.hp[monster_id] - sword_power;
+}
+
+void what_chosen(int *chosen,int monster_id,int *enemy_alive)
 {
   srand( time( NULL ) );
 
-  int amount_of_damage_player, if_hard_attack_success;
+  int amount_of_damage_player, if_hard_attack_success, sword_power = player1.sword_pow, if_igni_next_round;
 
   switch(*chosen)
   {
     case 1:
-      if(rand() % 4 == 0)
-        if_hard_attack_success = 0;
-      else
-        if_hard_attack_success = 1;
-
-      amount_of_damage_player = player1.sword_pow * 2 * if_hard_attack_success;
-      enemy.hp[monster_id] -= amount_of_damage_player;
+      enemy.hp[monster_id] = hard_attack(sword_power,monster_id);
       break;
     case 2:
-      amount_of_damage_player = player1.sword_pow;
-      enemy.hp[monster_id] -= amount_of_damage_player;
+      enemy.hp[monster_id] = quick_attack(sword_power,monster_id);
       break;
     case 3:
-      *number_of_igni_left = 2;
+      enemy.hp[monster_id] = igni_attack(sword_power,monster_id);
       break;
     case 4:
-      *number_of_quen_left = 2;
+      quen_def = 1;
       break;
   }
+  if(enemy.hp[monster_id] <= 0)
+    *enemy_alive = 0;
 }
 
-void fight(int *chosen,int monster_id)
+
+void fight(int *chosen,int monster_id,int *enemy_alive)
 {
   initscr();
   noecho();
@@ -89,6 +120,7 @@ void fight(int *chosen,int monster_id)
 
   wattron(menu, A_UNDERLINE);
   wattron(menu, A_BOLD);
+  mvwprintw(menu,yMax-2,1,"Moc miecza: %d",player1.sword_pow);
   mvwprintw(menu,yMax-6,1,"Informacje o graczu i przeciwniku:");
   wattroff(menu, A_BOLD);
   wattroff(menu, A_UNDERLINE);
@@ -99,7 +131,6 @@ void fight(int *chosen,int monster_id)
   wattroff(menu,A_BOLD);
   wattroff(menu,A_UNDERLINE);
   mvwprintw(menu,yMax-3,1,"Ilosc HP: %d",player1.hp);
-  mvwprintw(menu,yMax-2,1,"Moc miecza: %d",player1.sword_pow);
   wattron(menu,A_BOLD);
   wattron(menu,A_UNDERLINE);
   mvwprintw(menu,yMax-4,23,"%s",enemy.name[monster_id]);
@@ -145,20 +176,18 @@ while(true)
   }
   *chosen = show + 1;
 
-  if((*chosen == 3 && number_of_igni_left == 0) || (*chosen == 4 && number_of_quen_left == 0))
-  {
-    printw("Nie masz wystarczajacej mocy!"); //NIE WYPISUJE SIE
-    refresh();
-  }
+  what_chosen(chosen,monster_id,enemy_alive);
 
-
-
+/*
   if(*chosen == 1 || *chosen == 2)
   {
   move(yMax+2,0);
   clrtoeol();
   }
+  */
   //ZAMYKAMY OKNO
   endwin();
 
 }
+
+#endif
