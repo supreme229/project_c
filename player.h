@@ -9,11 +9,12 @@ struct player{
   int hp_max;
   int hp;
   int money;
+  int vigor;
   int sword_pow;
   int monsters_killed;
   int money_spent;
   int money_gained;
-}player1 = {100,100,110,0,0,0,0};
+}player1 = {100,1,110,2,0,0,0,0};
 
 void print_stats()
 {

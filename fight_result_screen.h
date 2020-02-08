@@ -41,7 +41,7 @@ void result_screen(int result)
     wrefresh(menu);
   }
   getch();
-
+  clear();
   endwin();
 }
 

@@ -6,6 +6,8 @@
 #include <unistd.h>
 #include <time.h>
 
+#include "structures.h"
+
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"
 #define ANSI_COLOR_YELLOW  "\x1b[33m"
@@ -35,12 +37,6 @@ char dialogue1[10][125] =
   "Lokalny: Dzieki ci Wiedzminie!"
 };
 
-void pause3(double time)
-{
-  fflush(stdout);
-  usleep(time * 1000000);
-}
-
 void print_introduction()
 {
   for(int i = 0; i < 3; i++)
@@ -57,7 +53,7 @@ void print_dialogue(char dialogue[][125],int lines)
       printf(ANSI_COLOR_BLUE "%s\n" ANSI_COLOR_RESET, dialogue[i]);
     else
       printf(ANSI_COLOR_GREEN "%s\n" ANSI_COLOR_RESET,dialogue[i]);
-    pause3(2.5);
+    pause1(2.5);
   }
 }
 

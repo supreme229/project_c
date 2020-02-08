@@ -1,6 +1,6 @@
 0 0 0 0 0 Brak zlecenia! aa
-1 50 50 15 5 Ghule aa
-2 100 100 15 10 ff aa
+1 50 50 15 1 5 Ghule aa
+2 100 100 15 2 10 ff aa
 3 100 100 15 10 ff aa
 4 100 100 15 10 ff aa
 5 100 100 15 10 ff aa
