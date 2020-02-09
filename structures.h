@@ -30,4 +30,9 @@ struct monster{
   char name[10][50];
 } enemy;
 
+struct players_cards{
+  char card_id[12];
+  char powers[3];
+}player_cards, enemy_cards;
+
 #endif
