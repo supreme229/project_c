@@ -16,32 +16,33 @@ char temp = *a;
 *a = *b;
 *b = temp;
 }
+
 void what_powers(char id,int iter,int yMax)
 {
   switch(id)
   {
         case '1':
-            mvprintw(yMax+6+iter,0,"Podwojenie punktow twojej karty. Numer mocy: %d\n",iter+1);
+            mvprintw(yMax+7+iter,0,"Podwojenie punktow twojej karty. Numer mocy: %d\n",iter+1);
             refresh();
             break;
         case '2':
-            mvprintw(yMax+6+iter,0,"Oslabienie mocy karty przeciwnika o 2pkt. Numer mocy: %d\n",iter+1);
+            mvprintw(yMax+7+iter,0,"Oslabienie mocy karty przeciwnika o 2pkt. Numer mocy: %d\n",iter+1);
             refresh();
             break;
         case '3':
-            mvprintw(yMax+6+iter,0,"Automatyczne wygranie rundy i 2 pkt. dodatkowe na start w nastepnej rundzie. Numer mocy: %d\n",iter+1);
+            mvprintw(yMax+7+iter,0,"Automatyczne wygranie rundy i 2 pkt. dodatkowe na start w nastepnej rundzie. Numer mocy: %d\n",iter+1);
             refresh();
             break;
         case '4':
-            mvprintw(yMax+6+iter,0,"Blokada jopka, traci wlasciowsc bicia asa u przeciwnika w rundzie. Numer mocy: %d\n",iter+1);
+            mvprintw(yMax+7+iter,0,"Blokada jopka, traci wlasciowsc bicia asa u przeciwnika w rundzie. Numer mocy: %d\n",iter+1);
             refresh();
             break;
         case '5':
-            mvprintw(yMax+6+iter,0,"Dodanie 3 pkt twojej karcie. Numer mocy: %d\n",iter+1);
+            mvprintw(yMax+7+iter,0,"Dodanie 3 pkt twojej karcie. Numer mocy: %d\n",iter+1);
             refresh();
             break;
         case '6':
-            mvprintw(yMax+6+iter,0,"Dzieli punkty rywala w rundzie na pol. Numer mocy: %d\n",iter+1);
+            mvprintw(yMax+7+iter,0,"Dzieli punkty rywala w rundzie na pol. Numer mocy: %d\n",iter+1);
             refresh();
             break;
   }
@@ -100,7 +101,7 @@ void give_cards_and_powers(int yMax)
 
      for(int i=0;i<6;i++)
      {
-        mvprintw(yMax+2,place,"%c ",player_cards.card_id[i]);
+        mvprintw(yMax+3,place,"%c ",player_cards.card_id[i]);
         pause1(1.0);
         refresh();
         place+=2;
@@ -108,14 +109,14 @@ void give_cards_and_powers(int yMax)
 
      for(int i=6;i<12;i++)
      {
-       mvprintw(yMax+3,place-12,"%c ",player_cards.card_id[i]);
+       mvprintw(yMax+4,place-12,"%c ",player_cards.card_id[i]);
        pause1(1.0);
        refresh();
        place+=2;
      }
 
      attron(A_BOLD);
-     mvprintw(yMax+5,0,"Twoje moce:");
+     mvprintw(yMax+6,0,"Twoje moce:");
      attroff(A_BOLD);
 
      int iter = 0;
@@ -128,14 +129,46 @@ void give_cards_and_powers(int yMax)
      }
 }
 
-void main_war(int intro)
+void what_chosen(int *chosen, WINDOW *menu, int *card_iterator, int yMax)
+{
+  switch(*chosen)
+    {
+    case 1:
+      //nastepna karta po prostu
+      mvwprintw(menu,yMax-9,1,"Twoja karta to: %c",player_cards.card_id[*card_iterator]);
+      mvwprintw(menu,yMax-8,1,"Nr uzytej mocy: Nie uzyto mocy!");
+      *card_iterator--;
+      break;
+    case 2:
+      //uzycie mocy1 i nastepna karta
+      mvwprintw(menu,yMax-9,1,"Twoja karta to: %c",player_cards.card_id[*card_iterator]);
+      mvwprintw(menu,yMax-8,1,"Nr uzytej mocy: ");
+      *card_iterator--;
+      break;
+    case 3:
+      //uzcie mocy2 i nastepna karta
+      mvwprintw(menu,yMax-9,1,"Twoja karta to: %c",player_cards.card_id[*card_iterator]);
+      mvwprintw(menu,yMax-8,1,"Nr uzytej mocy: ");
+      *card_iterator--;
+      break;
+    case 4:
+      //uzycie mocy3 i nastepna karta
+      mvwprintw(menu,yMax-9,1,"Twoja karta to: %c",player_cards.card_id[*card_iterator]);
+      mvwprintw(menu,yMax-8,1,"Nr uzytej mocy: ");
+      *card_iterator--;
+      break;
+    }
+    wrefresh(menu);
+}
+
+void main_war(int intro,int *power1_left, int *power2_left, int *power3_left, int *chosen,int *card_iterator)
 {
     initscr();
     noecho();
 
     int yMax, xMax, yBeg, xBeg;
     //DEKLARACJA OKNA
-    WINDOW * menu = newwin(9,30,1,0);
+    WINDOW * menu = newwin(15,35,1,0);
 
     //POBRANIE POCZATKU OKNA I KONIEC (JEGO GRANIC)
     getbegyx(menu,yBeg,xBeg);
@@ -165,7 +198,7 @@ void main_war(int intro)
     pause1(1.0);
 
     attron(A_BOLD);
-    mvprintw(yMax+1,xBeg,"Twoja talia: ");
+    mvprintw(yMax+2,xBeg,"Twoja talia: ");
     attroff(A_BOLD);
 
     give_cards_and_powers(yMax);
@@ -177,12 +210,12 @@ void main_war(int intro)
     attron(A_BOLD);
     mvprintw(yBeg,32,"Przypomnienie oznaczen kart:");
     attroff(A_BOLD);
-    mvprintw(yBeg + 1, 32,"A - as");
-    mvprintw(yBeg + 2, 32,"K - krol");
-    mvprintw(yBeg + 3, 32,"Q - dama");
-    mvprintw(yBeg + 4, 32,"T - dziesiatka");
-    mvprintw(yBeg + 5, 32,"9 - dziewiatka");
-    mvprintw(yBeg + 6, 32,"J - jopek");
+    mvprintw(yBeg + 1, 37,"A - as");
+    mvprintw(yBeg + 2, 37,"K - krol");
+    mvprintw(yBeg + 3, 37,"Q - dama");
+    mvprintw(yBeg + 4, 37,"T - dziesiatka");
+    mvprintw(yBeg + 5, 37,"9 - dziewiatka");
+    mvprintw(yBeg + 6, 37,"J - jopek");
 
     refresh();
 
@@ -193,13 +226,15 @@ else
 
   int show = 0;
   char *options[] = {
-    "Uzyj mocy.",
     "Rzuc kolejna karte.",
+    "Uzyj mocy 1",
+    "Uzyj mocy 2",
+    "Uzyj mocy 3"
   };
 
 while(true)
   {
-    for(int i = 0; i < 2; i++)
+    for(int i = 0; i < 4; i++)
       {
           //GDY OPCJA ZNALEZIONA PODSWIETLAMY JA
           if(i == show)
@@ -222,23 +257,34 @@ while(true)
           break;
         case KEY_DOWN:
           show++;
-          if(show == 2)
-            show = 1;
+          if(show == 4)
+            show = 3;
           break;
         default:
           break;
       }
       //10 - "ENTER" GDY UZTYKOWNIK GO WCISNIE MENU ZNIKA I IDZIEMY DALEJ
-      /*if(key == 10)
+      if(key == 10)
       {
         *chosen = show + 1;
-        if(*chosen == 1)
-          break;
-        else
-
-      }*/
+          if(*chosen == 1 || (*chosen == 2 && *power1_left != 0) || (*chosen == 3 && *power2_left != 0) || (*chosen == 4 && *power3_left != 0) )
+            {
+            move(yMax+1,0);
+            clrtoeol();
+            break;
+            }
+          else
+            if((*chosen == 2 && *power1_left == 0) || (*chosen == 3 && *power2_left == 0) || (*chosen == 4 && *power3_left == 0))
+            {
+              attron(A_BLINK);
+              mvprintw(yMax+1,0,"Brak tej mocy!");
+              attroff(A_BLINK);
+              refresh();
+            }
+      }
   }
-//  *chosen = show + 1;
+  what_chosen(chosen,menu,card_iterator,yMax);
+  getch();
 }
 
     endwin();
