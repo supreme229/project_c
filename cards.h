@@ -42,7 +42,7 @@ void what_powers(char id,int iter,int yMax)
             refresh();
             break;
         case '6':
-            mvprintw(yMax+7+iter,0,"Dzieli punkty rywala w rundzie na pol. Numer mocy: %d\n",iter+1);
+            mvprintw(yMax+7+iter,0,"Podzielenie mocy karty przeciwnika przez 2. Numer mocy: %d\n",iter+1);
             refresh();
             break;
   }
@@ -92,9 +92,9 @@ void give_cards_and_powers(int yMax)
       remaining_cards--;
     }
 
-    while(remaining_cards!=0)
+    while(remaining_cards != 0)
     {
-      enemy_cards.card_id[card_counter - 11] = war_cards_code[card_counter];
+      enemy_cards.card_id[card_counter - 12] = war_cards_code[card_counter];
       card_counter++;
       remaining_cards--;
     }
@@ -102,6 +102,7 @@ void give_cards_and_powers(int yMax)
      for(int i=0;i<6;i++)
      {
         mvprintw(yMax+3,place,"%c ",player_cards.card_id[i]);
+        mvprintw(yMax+5,place,"%c ",enemy_cards.card_id[i]);
         pause1(1.0);
         refresh();
         place+=2;
@@ -110,13 +111,14 @@ void give_cards_and_powers(int yMax)
      for(int i=6;i<12;i++)
      {
        mvprintw(yMax+4,place-12,"%c ",player_cards.card_id[i]);
+       mvprintw(yMax+6,place-12,"%c ",enemy_cards.card_id[i]);
        pause1(1.0);
        refresh();
        place+=2;
      }
 
      attron(A_BOLD);
-     mvprintw(yMax+6,0,"Twoje moce:");
+    // mvprintw(yMax+6,0,"Twoje moce:");
      attroff(A_BOLD);
 
      int iter = 0;
@@ -129,46 +131,167 @@ void give_cards_and_powers(int yMax)
      }
 }
 
-void what_chosen(int *chosen, WINDOW *menu, int *card_iterator, int yMax)
+void plr_power_points(char id,int *player_points, int *enemy_points, int *start_boost_plr, int *ace_not_blocked, int *power1_left, int *power2_left, int *power3_left)
+{
+  switch(id)
+  {
+    case '1':
+    *player_points *= 2;
+    break;
+
+    case '2':
+    *enemy_points -= 2;
+    break;
+
+    case '3':
+    *player_points = 100;
+    *start_boost_plr = 1;
+    break;
+
+    case '4':
+    *ace_not_blocked = 1;
+    break;
+
+    case '5':
+    *player_points += 3;
+    break;
+
+    case '6':
+    *enemy_points /= 2;
+    break;
+  }
+}
+
+void plr_card_points(char id,int *player_points)
+{
+  switch(id)
+  {
+   case 'T':
+      *player_points = 5;
+      break;
+
+    case '9':
+      *player_points = 3;
+      break;
+
+    case 'Q':
+      *player_points  = 6;
+      break;
+
+    case 'K':
+      *player_points = 8;
+      break;
+
+    case 'A':
+      *player_points = 12;
+      break;
+
+    case 'J':
+      *player_points = 0;
+      break;
+ }
+}
+
+void enm_card_points(char id,int *enemy_points)
+{
+  switch(id)
+  {
+   case 'T':
+      *enemy_points = 5;
+      break;
+
+    case '9':
+      *enemy_points = 3;
+      break;
+
+    case 'Q':
+      *enemy_points  = 6;
+      break;
+
+    case 'K':
+      *enemy_points = 8;
+      break;
+
+    case 'A':
+      *enemy_points = 12;
+      break;
+
+    case 'J':
+      *enemy_points = 0;
+      break;
+ }
+}
+
+void what_chosen(int *chosen, WINDOW *menu, int card_iterator, int yMax, int *player_points, int *enemy_points, int *start_boost_plr, int *ace_not_blocked, int *power1_left, int *power2_left, int *power3_left)
 {
   switch(*chosen)
     {
     case 1:
       //nastepna karta po prostu
-      mvwprintw(menu,yMax-9,1,"Twoja karta to: %c",player_cards.card_id[*card_iterator]);
+      mvwprintw(menu,yMax-9,1,"Twoja karta to: %c",player_cards.card_id[card_iterator]);
       mvwprintw(menu,yMax-8,1,"Nr uzytej mocy: Nie uzyto mocy!");
-      *card_iterator--;
+      plr_card_points(player_cards.card_id[card_iterator],player_points);
+      enm_card_points(enemy_cards.card_id[card_iterator],enemy_points);
+      mvwprintw(menu,yMax-7,1,"Ilosc twoich pkt: %d",*player_points);
+      mvwprintw(menu,yMax-6,1,"Ilosc pkt rywala: %d",*enemy_points);
+
       break;
     case 2:
       //uzycie mocy1 i nastepna karta
-      mvwprintw(menu,yMax-9,1,"Twoja karta to: %c",player_cards.card_id[*card_iterator]);
-      mvwprintw(menu,yMax-8,1,"Nr uzytej mocy: ");
-      *card_iterator--;
+      mvwprintw(menu,yMax-9,1,"Twoja karta to: %c",player_cards.card_id[card_iterator]);
+      mvwprintw(menu,yMax-8,1,"Nr uzytej mocy: 1");
+      plr_card_points(player_cards.card_id[card_iterator],player_points);
+      enm_card_points(enemy_cards.card_id[card_iterator],enemy_points);
+      plr_power_points(player_cards.powers[0],player_points,enemy_points,ace_not_blocked,start_boost_plr,power1_left, power2_left, power3_left);
+      mvwprintw(menu,yMax-7,1,"Ilosc twoich pkt: %d",*player_points);
+      mvwprintw(menu,yMax-6,1,"Ilosc pkt rywala: %d",*enemy_points);
+      move(yMax+7,0);
+      clrtoeol();
+      *power1_left = *power1_left - 1;
       break;
     case 3:
       //uzcie mocy2 i nastepna karta
-      mvwprintw(menu,yMax-9,1,"Twoja karta to: %c",player_cards.card_id[*card_iterator]);
-      mvwprintw(menu,yMax-8,1,"Nr uzytej mocy: ");
-      *card_iterator--;
+      mvwprintw(menu,yMax-9,1,"Twoja karta to: %c",player_cards.card_id[card_iterator]);
+      mvwprintw(menu,yMax-8,1,"Nr uzytej mocy: 2");
+      plr_card_points(player_cards.card_id[card_iterator],player_points);
+      enm_card_points(enemy_cards.card_id[card_iterator],enemy_points);
+      plr_power_points(player_cards.powers[1],player_points,enemy_points,ace_not_blocked,start_boost_plr,power1_left, power2_left, power3_left);
+      mvwprintw(menu,yMax-7,1,"Ilosc twoich pkt: %d",*player_points);
+      mvwprintw(menu,yMax-6,1,"Ilosc pkt rywala: %d",*enemy_points);
+      move(yMax+8,0);
+      clrtoeol();
+      *power2_left = *power2_left - 1;
       break;
     case 4:
       //uzycie mocy3 i nastepna karta
-      mvwprintw(menu,yMax-9,1,"Twoja karta to: %c",player_cards.card_id[*card_iterator]);
-      mvwprintw(menu,yMax-8,1,"Nr uzytej mocy: ");
-      *card_iterator--;
+      mvwprintw(menu,yMax-9,1,"Twoja karta to: %c",player_cards.card_id[card_iterator]);
+      mvwprintw(menu,yMax-8,1,"Nr uzytej mocy: 3");
+      plr_card_points(player_cards.card_id[card_iterator],player_points);
+      enm_card_points(enemy_cards.card_id[card_iterator],enemy_points);
+      plr_power_points(player_cards.powers[2],player_points,enemy_points,ace_not_blocked,start_boost_plr,power1_left, power2_left, power3_left);
+      mvwprintw(menu,yMax-7,1,"Ilosc twoich pkt: %d",*player_points);
+      mvwprintw(menu,yMax-6,1,"Ilosc pkt rywala: %d",*enemy_points);
+      move(yMax+9,0);
+      clrtoeol();
+      *power3_left = *power3_left - 1;
       break;
     }
     wrefresh(menu);
 }
 
-void main_war(int intro,int *power1_left, int *power2_left, int *power3_left, int *chosen,int *card_iterator)
+void main_war(int intro,int *power1_left, int *power2_left, int *power3_left, int *chosen,int card_iterator, int *player_points, int *enemy_points, int *start_boost_plr, int *start_boost_enemy,int *ace_not_blocked)
 {
-    initscr();
-    noecho();
+  initscr();
+  noecho();
 
-    int yMax, xMax, yBeg, xBeg;
-    //DEKLARACJA OKNA
-    WINDOW * menu = newwin(15,35,1,0);
+  int yMax, xMax, yBeg, xBeg;
+  //DEKLARACJA OKNA
+  WINDOW * menu = newwin(15,35,1,0);
+  box(menu,0,0);
+
+    if(intro == 1)
+    {
+
 
     //POBRANIE POCZATKU OKNA I KONIEC (JEGO GRANIC)
     getbegyx(menu,yBeg,xBeg);
@@ -176,7 +299,6 @@ void main_war(int intro,int *power1_left, int *power2_left, int *power3_left, in
     refresh();
 
     wattron(menu,A_BOLD);
-    box(menu,0,0);
     wrefresh(menu);
 
     //POCZATEK
@@ -187,15 +309,10 @@ void main_war(int intro,int *power1_left, int *power2_left, int *power3_left, in
     refresh();
     pause1(1.0);
 
-    if(intro == 1)
-    {
-
     mvwprintw(menu,yBeg,1,"Czas na rozdanie kart...");
     wrefresh(menu);
 
-    //refresh();
-
-    pause1(1.0);
+    pause1(0.5);
 
     attron(A_BOLD);
     mvprintw(yMax+2,xBeg,"Twoja talia: ");
@@ -283,10 +400,16 @@ while(true)
             }
       }
   }
-  what_chosen(chosen,menu,card_iterator,yMax);
+  what_chosen(chosen,menu,card_iterator,yMax,player_points,enemy_points,start_boost_plr,ace_not_blocked,power1_left,power2_left,power3_left);
+  pause1(1.0);
+  if(*power1_left == 0 && *power2_left == 0 && *power3_left == 0)
+    {
+      move(yMax+6,0);
+      clrtoeol();
+    }
   getch();
 }
 
-    endwin();
+endwin();
 }
 #endif
