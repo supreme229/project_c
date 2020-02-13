@@ -1,10 +1,14 @@
 #ifndef STRUCTURES_H
 #define STRUCTURES_H
+#define _BSD_SOURCE
 
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <time.h>
+
+#define _XOPEN_SOURCE   600
+#define _POSIX_C_SOURCE 200112
 
 void pause1(double time)
 {

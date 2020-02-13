@@ -74,7 +74,6 @@ void decision(int id, char decision[3][125], int *chosen)
 initscr();
 noecho();
 
-int yMax, xMax, yBeg, xBeg;
 //DEKLARACJA OKNA
 WINDOW * menu = newwin(3,60,0,0);
 

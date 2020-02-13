@@ -1,0 +1,13 @@
+    1 README.md
+  111 city_menu.h
+   39 file_read.h
+   32 final
+    4 info.txt
+    7 introduction.c
+   21 introduction.h
+   62 main.c
+  113 main.exe
+   75 player.h
+  127 shop_menu.h
+   12 structures.h
+  604 razem

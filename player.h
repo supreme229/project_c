@@ -25,10 +25,8 @@ void print_stats()
   //DEKLARACJA OKNA
   WINDOW * menu = newwin(12,35,1,0);
 
-  int yMax, xMax, yBeg, xBeg;
+  int yBeg, xBeg;
   getbegyx(menu,yBeg,xBeg);
-  getmaxyx(menu,yMax,xMax);
-
   //WPISY INFORMACYJNE
   //POCZATEK
   attron(A_BOLD);

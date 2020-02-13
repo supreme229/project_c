@@ -13,8 +13,6 @@ void result_screen(int result)
   initscr();
   noecho();
 
-  int yMax, xMax, yBeg, xBeg;
-
   //DEKLARACJA OKNA
   WINDOW * menu = newwin(7,50,1,0);
 

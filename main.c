@@ -120,7 +120,7 @@ void card_system(int money)
   int which_option, enemy_power = 1;
   int *card_option = &which_option;
   int *enemy_powers_used = &enemy_power;
-  int plr_pts = 0,enm_pts = 0,boost_plr = 0,boost_enm = 0,ace_nblock = 0;
+  int plr_pts = 0,enm_pts = 0,boost_plr = 0,boost_enm = 0;
 
   int card_iterator = 11, *player_points = &plr_pts, *enemy_points = &enm_pts, *start_boost_plr = &boost_plr, *start_boost_enemy = &boost_enm;
   main_war(1,enemy_powers_used,power1_left,power2_left,power3_left,card_option,card_iterator,player_points,enemy_points,start_boost_plr,start_boost_enemy,rounds_player,rounds_enemy);
@@ -168,11 +168,14 @@ void card_system(int money)
 
 int main()
 {
+  
   noecho();
 
   system("clear");
 
   FILE *shop_file, *enemy_info;
+  shop_file = fopen("info.txt","r");
+  enemy_info = fopen("list.txt","r");
   read_from_file_shop_items(shop_file);
   read_from_file_enemy_info(enemy_info);
 
@@ -235,14 +238,13 @@ int main()
   id_task = 0;
   print_dialogue5();
   system("clear");
-  int pause;
   printf("Zagrasz teraz w gre karciana z Geraltem, spokojnie ta rozgrywka jest towarzyska i nie stracisz zadnych monet ale nauczy cie grac, kazda pozniejsza gra bedzie toczyc sie o okreslona stawke.\n\n");
   pause1(1.0);
   printf("Nacisnij dowolny przycisk by kontynuowac.");
-  pause = getchar();
+  getchar();
   system("clear");
   print_card_introduction();
-  pause = getchar();
+  getchar();
   system("clear");
 
   card_system(0);

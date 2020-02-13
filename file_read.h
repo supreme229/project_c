@@ -7,7 +7,6 @@
 
 void read_from_file_shop_items(FILE *file)
 {
-  file = fopen("info.txt","r");
   for(int i = 0; i < 12; i++)
   {
     int price, attr,id;
@@ -38,7 +37,6 @@ void read_from_file_shop_items(FILE *file)
 
 void read_from_file_enemy_info(FILE *file)
 {
-  file = fopen("list.txt","r");
   for(int i = 0; i < 6; i++)
   {
     int id, reward_int, damage, hp,lvl;

@@ -77,13 +77,10 @@ void print_shop_menu(int shop_level, int *chosen, int *improvement)
   wrefresh(menu);
   wattroff(menu,A_BOLD);
 
-  int x,y;
-  getmaxyx(menu,y,x);
-
   wattron(menu,A_BOLD);
   mvwprintw(menu,1,1,"Dostepne przedmioty:");
   mvwprintw(menu,yMax-2,xBeg+1,"Fundusze : %d",player1.money);
-  mvwprintw(menu,1,x-10,"Cena:");
+  mvwprintw(menu,1,xMax-10,"Cena:");
   wattroff(menu,A_BOLD);
   //KONIEC
 
@@ -122,7 +119,7 @@ while(true)
           //A TU WYPISUJEMY I WYLACZAMY PODSWIETLENIE
           mvwprintw(menu,i+2,1,item.name[id_tab[i]]);
           wattroff(menu,A_REVERSE);
-          mvwprintw(menu,i+2,x-10,item.price_str[id_tab[i]]);
+          mvwprintw(menu,i+2,xMax-10,item.price_str[id_tab[i]]);
           wattron(menu, A_REVERSE);
           wattroff(menu,A_REVERSE);
       }

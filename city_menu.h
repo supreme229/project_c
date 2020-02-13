@@ -9,13 +9,13 @@ void print_town_menu(int *chosen, int start)
   initscr();
   noecho();
 
-  int yMax, xMax, yBeg, xBeg;
+  int yMax, yBeg, xBeg;
   //DEKLARACJA OKNA
   WINDOW * menu = newwin(7,40,1,0);
 
   //POBRANIE POCZATKU OKNA I KONIEC (JEGO GRANIC)
   getbegyx(menu,yBeg,xBeg);
-  getmaxyx(menu,yMax,xMax);
+  yMax = getmaxy(menu);
 
   //WPISY INFORMACYJNE
   //POCZATEK

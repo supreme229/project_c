@@ -154,7 +154,7 @@ void give_cards_and_powers(int yMax)
     }
 }
 
-void plr_power_points(char id,int *player_points, int *enemy_points, int *start_boost_plr, int *power1_left, int *power2_left, int *power3_left)
+void plr_power_points(char id,int *player_points, int *enemy_points, int *start_boost_plr)
 {
   switch(id)
   {
@@ -351,7 +351,7 @@ void what_chosen_option(int *enemy_powers_used, int *rounds_player, int *rounds_
       wattroff(menu,A_BOLD);
       plr_card_points(player_cards.card_id[card_iterator],player_points,enemy_points);
       enm_card_points(enemy_cards.card_id[card_iterator],enemy_points,player_points);
-      plr_power_points(player_cards.powers[0],player_points,enemy_points,start_boost_plr,power1_left, power2_left, power3_left);
+      plr_power_points(player_cards.powers[0],player_points,enemy_points,start_boost_plr);
       if(*rounds_player - *rounds_enemy >= 2 && *enemy_powers_used != 3)
       {
         enm_power_points(enemy_cards.powers[*enemy_powers_used - 1], player_points,enemy_points,start_boost_enm,enemy_powers_used);
@@ -401,7 +401,7 @@ void what_chosen_option(int *enemy_powers_used, int *rounds_player, int *rounds_
       wattroff(menu,A_BOLD);
       plr_card_points(player_cards.card_id[card_iterator],player_points,enemy_points);
       enm_card_points(enemy_cards.card_id[card_iterator],enemy_points,player_points);
-      plr_power_points(player_cards.powers[1],player_points,enemy_points,start_boost_plr,power1_left, power2_left, power3_left);
+      plr_power_points(player_cards.powers[1],player_points,enemy_points,start_boost_plr);
       if(*rounds_player - *rounds_enemy >= 2 && *enemy_powers_used != 3)
       {
         enm_power_points(enemy_cards.powers[*enemy_powers_used - 1], player_points,enemy_points,start_boost_enm,enemy_powers_used);
@@ -450,7 +450,7 @@ void what_chosen_option(int *enemy_powers_used, int *rounds_player, int *rounds_
       wattroff(menu,A_BOLD);
       plr_card_points(player_cards.card_id[card_iterator],player_points,enemy_points);
       enm_card_points(enemy_cards.card_id[card_iterator],enemy_points,player_points);
-      plr_power_points(player_cards.powers[2],player_points,enemy_points,start_boost_plr,power1_left, power2_left, power3_left);
+      plr_power_points(player_cards.powers[2],player_points,enemy_points,start_boost_plr);
       if(*rounds_player - *rounds_enemy >= 2 && *enemy_powers_used != 3)
       {
         enm_power_points(enemy_cards.powers[*enemy_powers_used - 1], player_points,enemy_points,start_boost_enm,enemy_powers_used);
@@ -514,7 +514,7 @@ void main_war(int intro, int *enemy_powers_used, int *power1_left, int *power2_l
   initscr();
   noecho();
 
-  int yMax, xMax, yBeg, xBeg;
+  int yMax, yBeg, xBeg;
   //DEKLARACJA OKNA
   WINDOW * menu = newwin(20,35,1,0);
 
@@ -526,7 +526,7 @@ void main_war(int intro, int *enemy_powers_used, int *power1_left, int *power2_l
 
     //POBRANIE POCZATKU OKNA I KONIEC (JEGO GRANIC)
     getbegyx(menu,yBeg,xBeg);
-    getmaxyx(menu,yMax,xMax);
+    yMax = getmaxy(menu);
     refresh();
 
     wattron(menu,A_BOLD);
@@ -570,6 +570,10 @@ void main_war(int intro, int *enemy_powers_used, int *power1_left, int *power2_l
   }
 else
 {
+  int yMax, yBeg, xBeg;
+  getbegyx(menu,yBeg,xBeg);
+  yMax = getmaxy(menu);
+  
   attron(A_BOLD);
   mvprintw(yMax+2,xBeg+15,"Nastepna karta: ",player_cards.card_id[card_iterator]);
   attroff(A_BOLD);
@@ -647,26 +651,29 @@ while(true)
     }
 
   if(*player_points > *enemy_points)
-  {
+    {
     *rounds_player = *rounds_player + 1;
     wattron(menu,A_BLINK);
     mvwprintw(menu,yMax-2,1,"Wygrywasz ta runde!");
     wattroff(menu,A_BLINK);
-  }
+    }
   else
-    if(*player_points < *enemy_points)
     {
+    if(*player_points < *enemy_points)
+      {
       *rounds_enemy = *rounds_enemy + 1;
       wattron(menu,A_BLINK);
       mvwprintw(menu,yMax-2,1,"Przegrywasz ta runde...");
       wattroff(menu,A_BLINK);
+      }
+      if(*player_points == *enemy_points)
+      {
+       wattron(menu,A_BLINK);
+       mvwprintw(menu,yMax-2,1,"Remis!");
+       wattroff(menu,A_BLINK);
+      }
     }
-    else
-     {
-      wattron(menu,A_BLINK);
-      mvwprintw(menu,yMax-2,1,"Remis!");
-      wattroff(menu,A_BLINK);
-    }
+
     wrefresh(menu);
 
     attron(A_BOLD);

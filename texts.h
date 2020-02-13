@@ -1,6 +1,10 @@
 #ifndef TEXTS_H
 #define TEXTS_H
 
+#define _XOPEN_SOURCE   600
+#define _POSIX_C_SOURCE 200112
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>

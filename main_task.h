@@ -16,9 +16,8 @@ void print_current_main_task(int id_task)
   //DEKLARACJA OKNA
   WINDOW * menu = newwin(7,43,1,0);
 
-  int yMax, xMax, yBeg, xBeg;
+  int yBeg, xBeg;
   getbegyx(menu,yBeg,xBeg);
-  getmaxyx(menu,yMax,xMax);
 
   //WPISY INFORMACYJNE
   //POCZATEK
