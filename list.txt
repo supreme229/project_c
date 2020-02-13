@@ -1,11 +1,6 @@
 0 0 0 0 0 Brak zlecenia! aa
 1 50 50 15 1 5 Ghule aa
-2 100 100 15 2 10 ff aa
-3 100 100 15 10 ff aa
-4 100 100 15 10 ff aa
-5 100 100 15 10 ff aa
-6 100 100 15 10 ff aa
-7 100 100 15 10 ff aa
-8 100 100 15 10 ff aa
-9 100 100 15 10 ff aa
-10 100 100 15 10 ff aa
+2 60 120 50 2 12 Krolewski mglak aa
+3 60 60 90 2 8 Utopce aa
+4 10 10 160 2 15 Zgnilce aa
+5 200 200 300 2 15 Zloty Smok aa

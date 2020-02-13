@@ -9,7 +9,7 @@
 #include <time.h>
 #include <unistd.h>
 
-int igni_next_round, quen_def,cheat_attempt;
+int cheat_attempt;
 
 int damage_enemy;
 int *amount_of_damage_enemy = &damage_enemy;
@@ -20,20 +20,20 @@ void pause4(int time)
   usleep(time * 1000000);
 }
 
-int igni_attack(int sword_power,int monster_id)
+int igni_attack(int sword_power,int monster_id, int *igni_next_round)
 {
-  int igni_attack = (rand() % ((sword_power * 2) - 2) + 2);
+  int igni_attack_pow = ((rand() % (sword_power * 2)) + 2);
 
   int if_igni_next_round = rand() % 3;
 
   if(if_igni_next_round == 1)
-    igni_next_round = 1;
+  {
+    *igni_next_round = 1;
+  }
   else
-    igni_next_round = 0;
+    *igni_next_round = 0;
 
-  enemy.hp[monster_id] -= igni_attack;
-
-  return igni_attack;
+  return igni_attack_pow;
 }
 
 int hard_attack(int sword_power, int monster_id)
@@ -45,8 +45,7 @@ int hard_attack(int sword_power, int monster_id)
   else
     if_hard_attack_success = 1;
 
-  int amount_of_damage_player = sword_power * 2 * if_hard_attack_success;
-  return amount_of_damage_player;
+  return sword_power * 2 * if_hard_attack_success;
 }
 
 int quick_attack(int sword_power, int monster_id)
@@ -54,56 +53,71 @@ int quick_attack(int sword_power, int monster_id)
   return sword_power;
 }
 
-void what_chosen(int *chosen,int monster_id,int *enemy_alive,WINDOW *menu,int yMax)
+void what_chosen(int *chosen,int monster_id,int *enemy_alive,WINDOW *menu,int yMax, int *igni_next_round, int *quen_def)
 {
   srand( time( NULL ) );
 
   int damage_plr = 0;
-  int *amount_of_damage_player = &damage_plr, if_hard_attack_success, sword_power = player1.sword_pow, if_igni_next_round;
+  int *amount_of_damage_player = &damage_plr, if_hard_attack_success, sword_power = player1.sword_pow;
 
   if(cheat_attempt !=1)
   {
   switch(*chosen)
   {
     case 1:
-      if(igni_next_round == 1)
+      if(*igni_next_round == 1)
         {
+          refresh();
           *amount_of_damage_player = (rand() % ((sword_power * 2) - 2) + 2);
-          igni_next_round = 0;
+          *igni_next_round = 0;
         }
-      *amount_of_damage_player = hard_attack(sword_power,monster_id);
+      *amount_of_damage_player += hard_attack(sword_power,monster_id);
       enemy.hp[monster_id] -= *amount_of_damage_player;
       mvwprintw(menu,yMax-3,1,"Zadales: %d DMG",*amount_of_damage_player);
       break;
     case 2:
-    if(igni_next_round == 1)
+    if(*igni_next_round == 1)
       {
+        refresh();
         *amount_of_damage_player = (rand() % ((sword_power * 2) - 2) + 2);
-        igni_next_round = 0;
+        *igni_next_round = 0;
       }
-
-      *amount_of_damage_player = quick_attack(sword_power,monster_id);
+      *amount_of_damage_player += quick_attack(sword_power,monster_id);
       enemy.hp[monster_id] -= *amount_of_damage_player;
       mvwprintw(menu,yMax-3,1,"Zadales: %d DMG",*amount_of_damage_player);
       break;
     case 3:
-      if(igni_next_round == 1)
+      if(*igni_next_round == 1)
         {
+          refresh();
           *amount_of_damage_player = (rand() % ((sword_power * 2) - 2) + 2);
-          igni_next_round = 0;
+          *igni_next_round = 0;
         }
       player1.vigor--;
-      *amount_of_damage_player += igni_attack(sword_power,monster_id);
+      *amount_of_damage_player += igni_attack(sword_power,monster_id,igni_next_round);
       enemy.hp[monster_id] -= *amount_of_damage_player;
       mvwprintw(menu,yMax-3,1,"Zadales: %d DMG",*amount_of_damage_player);
+      //
       break;
     case 4:
-      quen_def = 1;
+      if(*igni_next_round == 1)
+        {
+          refresh();
+          *amount_of_damage_player = (rand() % ((sword_power * 2) - 2) + 2);
+          *igni_next_round = 0;
+        }
+      *amount_of_damage_player += quick_attack(sword_power,monster_id);
+      enemy.hp[monster_id] -= *amount_of_damage_player;
+      mvwprintw(menu,yMax-3,1,"Zadales: %d DMG",*amount_of_damage_player);
+      *quen_def = 1;
+      player1.vigor--;
       break;
   }
 }
   else
     mvwprintw(menu,yMax-3,1,"Zadales: 0 DMG",0);
+
+  *amount_of_damage_player = 0;
 
   if(enemy.hp[monster_id] <= 0)
     *enemy_alive = 0;
@@ -142,10 +156,13 @@ mvwprintw(menu,yMax-5,23,"Zadawany DMG: %d",enemy.damage[monster_id]);
 wrefresh(menu);
 }
 
-void fight(int *chosen,int monster_id,int *enemy_alive)
+void fight(int *chosen,int monster_id,int *enemy_alive, int *quen_def, int *igni_next_round)
 {
   initscr();
   noecho();
+
+  *amount_of_damage_enemy = 0;
+  cheat_attempt = 0;
 
   int yMax, xMax, yBeg, xBeg;
 
@@ -155,6 +172,9 @@ void fight(int *chosen,int monster_id,int *enemy_alive)
   //POBRANIE POCZATKU OKNA I KONIEC (JEGO GRANIC)
   getbegyx(menu,yBeg,xBeg);
   getmaxyx(menu,yMax,xMax);
+
+  move(yMax+3,0);
+  clrtoeol();
 
   //WPISY INFORMACYJNE
   //POCZATEK
@@ -229,31 +249,44 @@ while(true)
   }
   *chosen = show + 1;
 
+
   if((*chosen == 3 || *chosen == 4) && player1.vigor == 0)
     {
+    attron(A_BLINK);
     mvprintw(yMax+1,0,"Nie masz wystarczajacych punktow vigoru na ta zagrywke! Omijasz ture!");
+    attroff(A_BLINK);
     refresh();
     cheat_attempt = 1;
+    pause1(1.5);
+    refresh();
     }
 
-  what_chosen(chosen,monster_id,enemy_alive,menu,yMax);
+
+
+  what_chosen(chosen,monster_id,enemy_alive,menu,yMax,igni_next_round,quen_def);
 
   write_info(yMax,menu,monster_id);
 
   pause1(1.5);
 
-  enemy_attack(monster_id);
-
+  if(*quen_def != 1)
+    enemy_attack(monster_id);
+  else
+    {
+      mvprintw(yMax+3,0,"Quen ochrania cie przed uderzeniem, nie dostajesz obrazen.");
+      refresh();
+    }
   move(yMax+1,0);
   clrtoeol();
-
-  mvwprintw(menu,yMax-2,1,"Otrzymales: %d DMG",*amount_of_damage_enemy);
+  if(*enemy_alive <= 0 )
+    mvwprintw(menu,yMax-2,1,"Twoj przeciwnik nie zyje");
+  else
+   mvwprintw(menu,yMax-2,1,"Otrzymales: %d DMG",*amount_of_damage_enemy);
   wrefresh(menu);
 
-  pause1(1.5);
-
+  pause1(2.5);
+  refresh();
   //write_info(yMax,menu,monster_id);
-
 
 
   //ZAMYKAMY OKNO

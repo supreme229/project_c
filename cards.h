@@ -10,6 +10,27 @@
 #include "structures.h"
 #include "texts.h"
 
+void print_card_introduction()
+{
+  printf("Krotki instruktarz gry karcianej:\n");
+  printf("Karty: As, Dama, Krol, Jopek, Dziewiatka, Dziesiatka po 4 z kazdej kolor nie odgrywa roli.\n");
+  printf("Moce: sa po to by wzmocnic swoja karte w rundzie lub oslabic przeciwnika.\n");
+  printf("Kazda karta ma okreslona ilosc punktow, ile ma ktora pokaze sie po prawej stronie menu gry.\n\n");
+  printf("Przebieg gry:\n");
+
+  printf("1. Przed rozpoczeciem gry, tasowane sa karty oraz moce. Kazdy gracz dostaje 12 kart i 3 moce do reki.\n");
+  printf("2. Po tasowaniu rozpoczyna sie rozgrywka ktora opiera sie na rundach. W kazdej rundzie gracz rzuca karte, lub uzywa mocy (uzycie mocy tez rzuca karte).\n");
+  printf("3. Po rzuconych kartach i mocach obu graczy dana runde wygrywa ten ktory po podliczeniu wszystkiego ma wiecej punktow. Jezeli jest po rowno, to remis.\n");
+  printf("4. Kazdej mocy mozna uzyc jednorazowo! \n");
+  printf("5. Najpierw dajemy karte a potem moc! Moze miec to znaczenie przy rzucani jopka.\n");
+  printf("5. Karty z poprzedniej rundy przepadaja i dazymy do konca talii.\n");
+  printf("6. Wygrywa gracz ktory wygral wiecej rund po wykorzystaniu wszystkich 12 kart\n\n");
+
+  printf("Gra jest dosc losowa, jednak wymaga rozsadnego wykorzystywania posiadanych mocy, moze przydac sie karta i dlugopis by wiedziec jakie karty zostaly graczowi przeciwnemu.\nPowodzenia!\n\n");
+  printf("Nacisnij dowolny przycisk by kontynuowac.");
+
+}
+
 //zamiana wartosci
 void swap(char *a, char *b)
 {
@@ -31,7 +52,7 @@ void what_powers(char id,int iter,int yMax)
             refresh();
             break;
         case '3':
-            mvprintw(yMax+7+iter,0,"Automatyczne wygranie rundy i 2 pkt. dodatkowe na start w nastepnej rundzie. Numer mocy: %d\n",iter+1);
+            mvprintw(yMax+7+iter,0,"Dodanie 1 pkt twojej karcie oraz 2 pkt. dodatkowe na start w nastepnej rundzie. Numer mocy: %d\n",iter+1);
             refresh();
             break;
         case '4':
@@ -146,7 +167,7 @@ void plr_power_points(char id,int *player_points, int *enemy_points, int *start_
     break;
 
     case '3':
-    *player_points = 100;
+    *player_points += 1;
     *start_boost_plr = 1;
     break;
 
@@ -177,7 +198,7 @@ void enm_power_points(char id,int *player_points, int *enemy_points, int *start_
     break;
 
     case '3':
-    *enemy_points = 100;
+    *enemy_points += 1;
     *start_boost_enm = 1;
     break;
 
@@ -201,19 +222,19 @@ void plr_card_points(char id,int *player_points, int *enemy_points)
   switch(id)
   {
    case 'T':
-      *player_points += 5;
+      *player_points += 8;
       break;
 
     case '9':
-      *player_points += 3;
+      *player_points += 6;
       break;
 
     case 'Q':
-      *player_points  += 6;
+      *player_points  += 9;
       break;
 
     case 'K':
-      *player_points += 8;
+      *player_points += 10;
       break;
 
     case 'A':
@@ -222,7 +243,7 @@ void plr_card_points(char id,int *player_points, int *enemy_points)
 
     case 'J':
       *player_points += 0;
-      *enemy_points -= 5;
+      *enemy_points -= 6;
       break;
  }
 }
@@ -232,19 +253,19 @@ void enm_card_points(char id,int *enemy_points, int *player_points)
   switch(id)
   {
    case 'T':
-      *enemy_points += 5;
+      *enemy_points += 8;
       break;
 
     case '9':
-      *enemy_points += 3;
-      break;
-
-    case 'Q':
       *enemy_points += 6;
       break;
 
+    case 'Q':
+      *enemy_points += 9;
+      break;
+
     case 'K':
-      *enemy_points += 8;
+      *enemy_points += 10;
       break;
 
     case 'A':
@@ -253,7 +274,7 @@ void enm_card_points(char id,int *enemy_points, int *player_points)
 
     case 'J':
       *enemy_points += 0;
-      *player_points -= 5;
+      *player_points -= 6;
       break;
  }
 }
@@ -538,11 +559,11 @@ void main_war(int intro, int *enemy_powers_used, int *power1_left, int *power2_l
     mvprintw(yBeg,37,"Przypomnienie oznaczen kart:");
     attroff(A_BOLD);
     mvprintw(yBeg + 1, 37,"A - as (12 pkt)");
-    mvprintw(yBeg + 2, 37,"K - krol (8 pkt)");
-    mvprintw(yBeg + 3, 37,"Q - dama (6 pkt)");
-    mvprintw(yBeg + 4, 37,"T - dziesiatka (5 pkt)");
-    mvprintw(yBeg + 5, 37,"9 - dziewiatka (3 pkt)");
-    mvprintw(yBeg + 6, 37,"J - jopek (0 pkt ale przeciwnik -5 pkt)");
+    mvprintw(yBeg + 2, 37,"K - krol (10 pkt)");
+    mvprintw(yBeg + 3, 37,"Q - dama (9 pkt)");
+    mvprintw(yBeg + 4, 37,"T - dziesiatka (8 pkt)");
+    mvprintw(yBeg + 5, 37,"9 - dziewiatka (6 pkt)");
+    mvprintw(yBeg + 6, 37,"J - jopek (0 pkt ale przeciwnik -6 pkt)");
 
     refresh();
 

@@ -14,7 +14,8 @@ struct player{
   int monsters_killed;
   int money_spent;
   int money_gained;
-}player1 = {100,1,110,2,0,0,0,0};
+  int reputation_points;
+}player1 = {50,50,55,2,0,0,0,0,0};
 
 void print_stats()
 {

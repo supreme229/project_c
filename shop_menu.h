@@ -39,10 +39,16 @@ void which_bought(int id)
         else
             player1.hp += item.attribute[id];
         break;
+      case 4:
+        player1.sword_pow += item.attribute[id];
+        break;
+      case 5:
+        player1.vigor++;
+        break;
     }
 }
 
-void print_shop_menu(int shop_level, int *chosen)
+void print_shop_menu(int shop_level, int *chosen, int *improvement)
 {
   initscr();
   noecho();
@@ -83,12 +89,12 @@ void print_shop_menu(int shop_level, int *chosen)
 
   //MOZLIWOSCI
   //char *shop_items[];
-  int randomized_id, check_id = 0,id_tab[4] = {5,5,5,5}, iter = 0;
+  int randomized_id, check_id = 0,id_tab[4] = {10,10,10,10}, iter = 0;
   srand( time( NULL ) );
 
-  while(id_tab[3] == 5)
+  while(id_tab[3] == 10)
   {
-    randomized_id = rand() % shop_level;
+    randomized_id = rand() % shop_level + *improvement;
 
     check_id = check(randomized_id, id_tab, 4);
     if(check_id == 1)

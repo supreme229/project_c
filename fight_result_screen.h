@@ -1,6 +1,11 @@
 #ifndef FIGHT_RESULT_SCREEN_H
 #define FIGHT_RESULT_SCREEN_H
 
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
 #include <ncurses.h>
 
 void result_screen(int result)
@@ -40,8 +45,8 @@ void result_screen(int result)
     wattroff(menu,A_BLINK);
     wrefresh(menu);
   }
+
   getch();
-  clear();
   endwin();
 }
 
